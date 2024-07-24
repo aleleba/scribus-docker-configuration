@@ -21,12 +21,17 @@ RUN apk add --no-cache \
     bison \
     gperf \
     ruby \
-    perl
+    perl \
+    # Instalar Python 2
+    python2 \
+    # Crear un enlace simbólico para asegurar que Python 2 sea accesible como 'python'
+    && ln -s /usr/bin/python2 /usr/bin/python
 
 # Compilar qtwebkit desde el código fuente
 RUN git clone https://github.com/qt/qtwebkit.git \
     && cd qtwebkit \
-    && cmake . -DPORT=Qt \
+    # Especificar explícitamente el uso de Python 2 para la configuración
+    && cmake . -DPORT=Qt -DPYTHON_EXECUTABLE=/usr/bin/python2 \
     && make \
     && make install
 
