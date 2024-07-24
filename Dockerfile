@@ -26,7 +26,7 @@ RUN apk add --no-cache \
 # Compilar qtwebkit desde el código fuente
 RUN git clone https://github.com/qt/qtwebkit.git \
     && cd qtwebkit \
-    && cmake . \
+    && cmake . -DPORT=Qt \
     && make \
     && make install
 
@@ -38,9 +38,7 @@ RUN wget https://sourceforge.net/projects/scribus/files/scribus/1.6.2/scribus-1.
     && make \
     && make install
 
-# add local files
+# Añadir archivos locales y configurar puertos y volúmenes
 COPY /root /
-
-# ports and volumes
 EXPOSE 3000
 VOLUME /config
