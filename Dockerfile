@@ -22,16 +22,24 @@ RUN apk add --no-cache \
     gperf \
     ruby \
     perl \
-    # Instalar Python 2
-    python2 \
-    # Crear un enlace simbólico para asegurar que Python 2 sea accesible como 'python'
-    && ln -s /usr/bin/python2 /usr/bin/python
+    libffi-dev \
+    openssl-dev \
+    zlib-dev \
+    xz \
+    tar
+
+# Descargar, compilar e instalar Python 2 desde el código fuente
+RUN wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tar.xz && \
+    tar -xf Python-2.7.18.tar.xz && \
+    cd Python-2.7.18 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    ln -s /usr/local/bin/python2.7 /usr/bin/python
 
 # Compilar qtwebkit desde el código fuente
 RUN git clone https://github.com/qt/qtwebkit.git \
     && cd qtwebkit \
-    # Especificar explícitamente el uso de Python 2 para la configuración
-    && cmake . -DPORT=Qt -DPYTHON_EXECUTABLE=/usr/bin/python2 \
+    && cmake . -DPORT=Qt -DPYTHON_EXECUTABLE=/usr/bin/python2.7 \
     && make \
     && make install
 
