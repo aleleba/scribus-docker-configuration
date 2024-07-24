@@ -1,8 +1,11 @@
-FROM ghcr.io/linuxserver/baseimage-kasmvnc:ubuntunoble
+FROM ghcr.io/linuxserver/baseimage-kasmvnc:alpine320
 
-# Actualizar los índices de los paquetes y instalar Scribus
-RUN apt-get update && \
-    apt-get install -y scribus
+# Habilitar el repositorio "community" y actualizar los índices de los paquetes
+RUN echo "@community http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+    apk update
+
+# Instalar Scribus desde el repositorio "community"
+RUN apk add scribus@community
 
 # Añadir archivos locales y configurar puertos y volúmenes
 COPY /root /
